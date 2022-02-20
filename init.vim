@@ -31,8 +31,9 @@ autocmd FileType go,r,rmd inoremap <buffer> <C-n> <C-x><C-o>
 
 let g:slime_target = "tmux"
 let g:slime_default_config = {"socket_name": "default", "target_pane": "{last}"}
-nmap <C-L><C-L> <Plug>SlimeLineSend
-nmap <C-P><C-P> <Plug>SlimeParagraphSend
+let g:slime_dont_ask_default = 1
+nmap <C-C><C-L> <Plug>SlimeLineSend
+nmap <C-C><C-P> <Plug>SlimeParagraphSend
 nmap <C-C><C-C> <Plug>SlimeSendCell
 
 " set statusline+=%{gutentags#statusline()}
@@ -145,3 +146,38 @@ set shiftwidth=4
 set number
 
 autocmd FileType tex,c,ocaml,r,rmd,cpp,javascript,typescript setlocal shiftwidth=2 tabstop=2
+
+function! NextCell(pattern) range
+    let rg = range(a:firstline, a:lastline)
+    let chunk = len(rg)
+    for var in range(1, chunk)
+        let i = search(a:pattern, "nW")
+        if i == 0
+            return
+        else
+            call cursor(i+1, 1)
+        endif
+    endfor
+    return
+endfunction
+
+function! PrevCell(pattern) range
+    let rg = range(a:firstline, a:lastline)
+    let chunk = len(rg)
+    for var in range(1, chunk)
+        let curline = line(".")
+        let i = search(a:pattern, "bnW")
+        if i != 0
+            call cursor(i-1, 1)
+        endif
+        let i = search(a:pattern, "bnW")
+        if i == 0
+            call cursor(curline, 1)
+            return
+        else
+            call cursor(i+1, 1)
+        endif
+    endfor
+    return
+endfunction
+
