@@ -12,12 +12,13 @@ call plug#begin()
   Plug 'sheerun/vim-polyglot',
   " Plug 'kkoomen/vim-doge', { 'do': { -> doge#install() } }
 
-  Plug 'dense-analysis/ale', { 'for': ['go', 'rust', 'python', 'c', 'cpp', 'javascript', 'typescript', 'typescriptreact', 'json', 'rmd', 'r'] },
+  Plug 'dense-analysis/ale', { 'for': ['go', 'rust', 'python', 'c', 'cpp', 'javascript', 'typescript', 'typescriptreact', 'json', 'rmd', 'r', 'clojure'] },
+  Plug 'jpalardy/vim-slime',
   " Plug 'neoclide/coc.nvim', {'branch': 'release', 'for': ['python', 'typescript', 'javascript' ]},
 
   Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' },
   Plug 'jalvesaq/Nvim-R', {'branch': 'stable'},
-  Plug 'jpalardy/vim-slime',
+  Plug 'guns/vim-sexp',
 call plug#end()
 
 colorscheme cobalt2
@@ -32,9 +33,23 @@ autocmd FileType go,r,rmd inoremap <buffer> <C-n> <C-x><C-o>
 let g:slime_target = "tmux"
 let g:slime_default_config = {"socket_name": "default", "target_pane": "{last}"}
 let g:slime_dont_ask_default = 1
-nmap <C-C><C-L> <Plug>SlimeLineSend
-nmap <C-C><C-P> <Plug>SlimeParagraphSend
-nmap <C-C><C-C> <Plug>SlimeSendCell
+
+function! SendWord()
+    let reg_save = @@
+    let save_pos = getpos(".")
+    silent exe "normal! viwy"
+    call slime#send(@@ . "\r")
+    call setpos('.', save_pos)
+    let @@ = reg_save
+endfunction
+
+nmap <silent> <buffer> \ww :call SendWord()<CR>
+vmap \cc <Plug>SlimeRegionSend
+nmap \ll <Plug>SlimeLineSend
+nmap \pp <Plug>SlimeParagraphSend
+nmap \cc <Plug>SlimeSendCell
+
+let g:sexp_enable_insert_mode_mappings = 0
 
 " set statusline+=%{gutentags#statusline()}
 
@@ -71,6 +86,7 @@ let g:ale_linters = {
     \ 'typescriptreact': ['eslint'],
     \ 'rmd': ['languageserver'],
     \ 'r': ['languageserver'],
+    \ 'clojure': ['joker'],
     \}
 
 let g:airline#extensions#tabline#enabled = 1

@@ -2,9 +2,11 @@ nnoremap J j
 nnoremap K k
 
 nnoremap <leader>gv :execute '!open ' . substitute(expand("%:r"), " ", "\\\\ ", "") . '.pdf'
-" nnoremap <leader>lp :w<CR>:execute '!latexmk -pdf -g -halt-on-error "' . substitute(expand("%"), " ", "\\\\ ", "") . '"'
 nnoremap <leader>lp :w<CR>:execute '!latexmk -pdf -g -halt-on-error "' . expand("%") . '"'
 nnoremap <leader>f :w<CR>:silent !/Applications/Skim.app/Contents/SharedSupport/displayline <C-r>=line('.')<CR> %<.pdf<CR> <C-L><CR>
+
+nnoremap <silent> <buffer> ]] :call NextCell("^\\\\\\(sub\\)*section")<CR>
+nnoremap <silent> <buffer> [[ :call PrevCell("^\\\\\\(sub\\)*section")<CR>
 
 " latex macros
 iab ca<Bslash> \begin{cases}<NL>\end{cases}<ESC>O<BACKSPACE><SPACE>
@@ -34,10 +36,5 @@ function! SetServerName()
   let cmd = printf("echo %s > %s", v:servername, nvim_server_file)
   call system(cmd)
 endfunction
-
-" augroup vimtex_common
-"     autocmd!
-"     autocmd FileType tex call SetServerName()
-" augroup END
 
 call SetServerName()
