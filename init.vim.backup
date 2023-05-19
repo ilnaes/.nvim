@@ -1,4 +1,6 @@
-" let mapleader = ','
+let mapleader = ','
+" let g:ale_disable_lsp = 1
+
 let g:polyglot_disabled = ["markdown", "autoindent"]
 
 call plug#begin()
@@ -10,39 +12,32 @@ call plug#begin()
   Plug 'sheerun/vim-polyglot',
   " Plug 'kkoomen/vim-doge', { 'do': { -> doge#install() } }
 
-  Plug 'dense-analysis/ale', { 'for': ['go', 'rust', 'python', 'c', 'cpp', 'javascript', 'typescript', 'typescriptreact', 'json', 'rmd', 'r', 'clojure', 'lua'] },
+  Plug 'dense-analysis/ale', { 'for': ['go', 'rust', 'python', 'c', 'cpp', 'javascript', 'typescript', 'typescriptreact', 'json', 'rmd', 'r', 'clojure'] },
   Plug 'jpalardy/vim-slime',
   " Plug 'neoclide/coc.nvim', {'branch': 'release', 'for': ['python', 'typescript', 'javascript' ]},
 
-  Plug 'Olical/conjure', { 'for': ['clojure'] },
-  Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' },
+  Plug 'Olical/conjure',
+  " Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' },
   " Plug 'jalvesaq/Nvim-R', {'branch': 'stable'},
   Plug 'guns/vim-sexp',
-  Plug 'cohama/lexima.vim',
-  Plug 'vimwiki/vimwiki',
+  Plug 'jiangmiao/auto-pairs',
 call plug#end()
 
 colorscheme cobalt2
 
-let g:conjure#filetype#fennel = "conjure.client.fennel.stdio"
-
-set nocompatible
 syntax enable
 filetype plugin on
-
-lua require('settings')
-lua require('maps')
-
-let g:vimwiki_list = [{'path': '~/Dropbox/wiki', 'syntax': 'markdown', 'ext': '.md'}]
-let g:vimwiki_global_ext = 0
+autocmd FileType rmd source ~/.config/nvim/ftplugin/r.vim
 
 set omnifunc=syntaxcomplete#Complete
-autocmd! FileType c,cpp,go setlocal commentstring=//\ %s
-autocmd! FileType go,r,rmd,clojure inoremap <buffer> <C-n> <C-x><C-o><C-p>
-autocmd! FileType rmd source ~/.config/nvim/ftplugin/r.vim
+autocmd FileType c,cpp,go setlocal commentstring=//\ %s
+autocmd FileType go,r,rmd,clojure inoremap <buffer> <C-n> <C-x><C-o><C-p>
+
+let g:conjure#filetype#fennel = "conjure.client.fennel.stdio"
+let g:conjure#log#hud#enable = v:false
 
 " set completeopt-=preview
-autocmd! CompleteDone * pclose
+autocmd CompleteDone * pclose
 set splitbelow
 
 " set omnifunc=syntaxcomplete#Complete
@@ -83,7 +78,6 @@ let g:ale_fixers = {
     \ 'html': ['prettier'],
     \ 'rmd': ['styler'],
     \ 'r': ['styler'],
-    \ 'lua': ['stylua'],
     \}
 
 let g:ale_lint_on_text_changed = 'never'
@@ -102,7 +96,6 @@ let g:ale_linters = {
     \ 'rmd': ['languageserver'],
     \ 'r': ['languageserver'],
     \ 'clojure': ['clj-kondo'],
-    \ 'lua': ['luacheck'],
     \}
 
 let g:airline#extensions#tabline#enabled = 1
@@ -131,6 +124,22 @@ if has("autocmd")
     \| exe "normal! g'\"" | endif
 endif
 
+inoremap <expr> <cr> ((pumvisible())?("\<C-y>"):("\<cr>"))
+
+nnoremap <C-e> :call ToggleQuickFix()<CR>
+nnoremap <Leader>f :Files<CR>
+nnoremap <Leader>a :Rg<CR>
+nnoremap <Leader>t :Tags<CR>
+nnoremap ; :
+noremap <Leader>y "*y
+noremap <Leader>p "*p
+nnoremap j gj
+nnoremap k gk
+vnoremap j gj
+vnoremap k gk
+nnoremap <C-l> :bnext<CR>
+nnoremap <C-h> :bprev<CR>
+noremap <Leader>h :noh<CR>
 
 :command Q bd
 
@@ -155,12 +164,13 @@ set hidden
 set updatetime=500
 set noshowcmd
 set guicursor=
+
 set signcolumn=yes
 set tabstop=4
 set shiftwidth=4
 set number
 
-autocmd! FileType lua,markdown,tex,c,ocaml,r,rmd,cpp,javascript,typescript setlocal shiftwidth=2 tabstop=2
+autocmd FileType tex,c,ocaml,r,rmd,cpp,javascript,typescript setlocal shiftwidth=2 tabstop=2
 
 function! NextCell(pattern) range
     let rg = range(a:firstline, a:lastline)

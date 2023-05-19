@@ -1,5 +1,7 @@
-nmap <buffer> [[ <Plug>RPreviousRChunk
-nmap <buffer> ]] <Plug>RNextRChunk
+let g:slime_cell_delimiter = "```"
+
+" nmap <buffer> [[ <Plug>RPreviousRChunk
+" nmap <buffer> ]] <Plug>RNextRChunk
 
 inoremap <buffer> >> <Esc>:normal! a %>%<CR>a
 

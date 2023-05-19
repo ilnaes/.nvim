@@ -65,3 +65,8 @@ nmap <buffer> <silent> \cc :<C-U>call SendForm(v:count1)<CR>
 nmap <buffer> <silent> \cp :call SendForm(2)<CR>
 
 autocmd BufWritePre <buffer> call Format()
+
+let g:conjure#client#clojure#nrepl#connection#auto_repl#cmd = "clojure -Arepl"
+
+set splitright
+" :let g:conjure#client_on_load = v:false
