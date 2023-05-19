@@ -1,4 +1,3 @@
-" let mapleader = ','
 let g:polyglot_disabled = ["markdown", "autoindent"]
 
 call plug#begin()
@@ -24,28 +23,24 @@ call plug#end()
 
 colorscheme cobalt2
 
-let g:conjure#filetype#fennel = "conjure.client.fennel.stdio"
-
-set nocompatible
-syntax enable
-filetype plugin on
-
 lua require('settings')
 lua require('maps')
+
+let g:conjure#filetype#fennel = "conjure.client.fennel.stdio"
 
 let g:vimwiki_list = [{'path': '~/Dropbox/wiki', 'syntax': 'markdown', 'ext': '.md'}]
 let g:vimwiki_global_ext = 0
 
-set omnifunc=syntaxcomplete#Complete
+command Q bd
+
 autocmd! FileType c,cpp,go setlocal commentstring=//\ %s
 autocmd! FileType go,r,rmd,clojure inoremap <buffer> <C-n> <C-x><C-o><C-p>
 autocmd! FileType rmd source ~/.config/nvim/ftplugin/r.vim
+autocmd! FileType lua,markdown,tex,c,ocaml,r,rmd,cpp,javascript,typescript setlocal shiftwidth=2 tabstop=2
 
 " set completeopt-=preview
+set omnifunc=syntaxcomplete#Complete
 autocmd! CompleteDone * pclose
-set splitbelow
-
-" set omnifunc=syntaxcomplete#Complete
 
 let g:slime_target = "tmux"
 let g:slime_default_config = {"socket_name": "default", "target_pane": "{last}"}
@@ -111,56 +106,12 @@ let g:airline_section_y = ''
 let g:airline_section_warning = ''
 let g:airline_section_z = '%3p%% %3l/%L:%3v'
 
-function! ToggleQuickFix()
-  if exists("g:qwindow")
-    lclose
-    unlet g:qwindow
-  else
-    try
-      lopen 10
-      let g:qwindow = 1
-    catch 
-      echo "No Errors found!"
-    endtry
-  endif
-endfunction
-
 " open file in previous position
 if has("autocmd")
   au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
     \| exe "normal! g'\"" | endif
 endif
 
-
-:command Q bd
-
-set backspace=indent,eol,start
-set vb                      " show visual bell instead of beeping
-set noshowmode
-set whichwrap=h,l,<,>,[,]   " wrap around line
-set wildmenu                " have autocomplete on commands
-set hlsearch                " highlight search term
-set scrolloff=1             " keep context while scrolling
-set title                   " show title
-set ruler                   " show ruler
-set wrapscan                " search wraps around file
-set ttyfast                 " smoother changes
-set showmatch               " show matching (), [], {}
-set mouse=a
-set expandtab               " convert tabs to spaces
-set autoindent
-set autoread                " reload if file on disk changes
-set shortmess+=c            " no autocomplete messages
-set hidden
-set updatetime=500
-set noshowcmd
-set guicursor=
-set signcolumn=yes
-set tabstop=4
-set shiftwidth=4
-set number
-
-autocmd! FileType lua,markdown,tex,c,ocaml,r,rmd,cpp,javascript,typescript setlocal shiftwidth=2 tabstop=2
 
 function! NextCell(pattern) range
     let rg = range(a:firstline, a:lastline)
