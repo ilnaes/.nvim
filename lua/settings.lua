@@ -18,6 +18,7 @@ o.showcmd = false
 o.number = true
 o.hidden = true
 o.splitbelow = true
+o.splitright = true
 o.omnifunc = "syntaxcomplete#Complete"
 o.wildmenu = true
 o.shiftwidth = 2

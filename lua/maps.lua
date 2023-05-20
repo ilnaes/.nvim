@@ -27,7 +27,7 @@ end
 
 M.noremap("n", ";", ":")
 
--- M.noremap("i", "<cr>", "((pumvisible())?(<C-y>):(<cr>))", { expr = true })
+M.noremap("i", "<cr>", "(pumvisible()?(<C-y>):(<cr>))", { expr = true })
 M.noremap("n", "<c-e>", toggle_quickfix)
 M.noremap({ "n", "v" }, "j", "gj")
 M.noremap({ "n", "v" }, "k", "gk")

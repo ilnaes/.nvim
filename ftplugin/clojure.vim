@@ -68,5 +68,4 @@ autocmd BufWritePre <buffer> call Format()
 
 let g:conjure#client#clojure#nrepl#connection#auto_repl#cmd = "clojure -Arepl"
 
-set splitright
 " :let g:conjure#client_on_load = v:false
