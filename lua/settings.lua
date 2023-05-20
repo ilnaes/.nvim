@@ -1,5 +1,7 @@
 local o = vim.opt
 
+vim.cmd("colorscheme cobalt2")
+
 vim.g.mapleader = ","
 
 o.vb = true
@@ -16,8 +18,10 @@ o.showcmd = false
 o.number = true
 o.hidden = true
 o.splitbelow = true
-
+o.omnifunc = "syntaxcomplete#Complete"
 o.wildmenu = true
+o.shiftwidth = 2
+o.tabstop = 2
 
 vim.o.shortmess = vim.o.shortmess .. "c"
 vim.o.whichwrap = vim.o.whichwrap .. "<,>,h,l,[,]"
