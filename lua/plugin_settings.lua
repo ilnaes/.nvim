@@ -1,3 +1,5 @@
+local wiki_path = "~/Dropbox/wiki"
+
 vim.g["conjure#filetype#fennel"] = "conjure.client.fennel.stdio"
 
 vim.g["sexp_enable_insert_mode_mappings"] = 0
@@ -13,7 +15,7 @@ vim.g["airline_section_warning"] = ""
 vim.g["airline_section_z"] = "%3p%% %3l/%L:%3v"
 
 vim.g["vimwiki_global_ext"] = 0
-vim.g["vimwiki_list"] = { { path = "~/Dropbox/wiki", syntax = "markdown", ext = ".md" } }
+vim.g["vimwiki_list"] = { { path = wiki_path, syntax = "markdown", ext = ".md" } }
 
 vim.g["ale_fix_on_save"] = 1
 vim.g["ale_lint_on_text_changed"] = "never"
@@ -52,6 +54,20 @@ vim.g["ale_fixers"] = {
   lua = { "stylua" },
 }
 
+local m = require("maps")
+
+m.noremap("n", "<Leader>f", ":Files<CR>")
+m.noremap("n", "<Leader>a", ":Rg<CR>")
+m.noremap("n", "<Leader>t", ":Tags<CR>")
+m.noremap("n", "<Leader>wr", function()
+  vim.fn["fzf#vim#grep"](
+    'rg --column --line-number --no-heading --color=always --smart-case -- "" ' .. wiki_path,
+    1,
+    vim.fn["fzf#vim#with_preview"](),
+    0
+  )
+end)
+
 local function send_word()
   local reg_save = vim.fn.getreg('"')
   local save_pos = vim.api.nvim_win_get_cursor(0)
@@ -61,8 +77,7 @@ local function send_word()
   vim.fn.setreg('"', reg_save)
 end
 
-local m = require("maps")
-m.noremap("n", "\\ww", send_word, { silent = true, buffer = true })
+m.noremap("n", "\\ww", send_word)
 m.noremap("v", "\\vv", "<Plug>SlimeRegionSend")
 m.noremap("n", "\\ll", "<Plug>SlimeLineSend")
 m.noremap("n", "\\pp", "<Plug>SlimeParagraphSend")

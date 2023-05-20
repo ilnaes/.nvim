@@ -1,5 +1,8 @@
 local dir = os.getenv("HOME") .. "/.config/nvim/"
 
+-- load some non-migrated code
+vim.cmd("source " .. dir .. ".vimrc")
+
 dofile(dir .. "lua/settings.lua")
 dofile(dir .. "lua/maps.lua")
 dofile(dir .. "lua/plugin_settings.lua")

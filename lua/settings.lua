@@ -23,6 +23,7 @@ o.omnifunc = "syntaxcomplete#Complete"
 o.wildmenu = true
 o.shiftwidth = 2
 o.tabstop = 2
+o.concealcursor = "nc"
 
 vim.o.shortmess = vim.o.shortmess .. "c"
 vim.o.whichwrap = vim.o.whichwrap .. "<,>,h,l,[,]"

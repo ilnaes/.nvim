@@ -16,7 +16,7 @@ call plug#begin()
   Plug 'Olical/conjure', { 'for': ['clojure', 'fennel'] },
   Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' },
   Plug 'guns/vim-sexp',
-  Plug 'cohama/lexima.vim',
+
   Plug 'vimwiki/vimwiki',
 call plug#end()
 
@@ -53,5 +53,3 @@ function! PrevCell(pattern) range
     endfor
     return
 endfunction
-
-lua dofile(os.getenv("HOME") .. "/.config/nvim/ninit.lua")
