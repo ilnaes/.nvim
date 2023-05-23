@@ -1,11 +1,14 @@
 local dir = os.getenv("HOME") .. "/.config/nvim/"
 
+dofile(dir .. "lua/opts.lua")
+dofile(dir .. "lua/maps.lua")
+
+vim.g["polyglot_disabled"] = { "markdown", "autoindent" }
+
 -- load some non-migrated code
 vim.cmd("source " .. dir .. ".vimrc")
 
-dofile(dir .. "lua/settings.lua")
-dofile(dir .. "lua/maps.lua")
-dofile(dir .. "lua/plugin_settings.lua")
+dofile(dir .. "lua/plug.lua")
 
 local function nvim_create_augroups(definitions)
   for group_name, definition in pairs(definitions) do

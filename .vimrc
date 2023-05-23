@@ -1,5 +1,3 @@
-lua vim.g['polyglot_disabled'] = {"markdown", "autoindent"}
-
 call plug#begin()
   Plug 'vim-airline/vim-airline',
 
@@ -18,38 +16,8 @@ call plug#begin()
   Plug 'guns/vim-sexp',
 
   Plug 'vimwiki/vimwiki',
+  Plug 'windwp/nvim-autopairs',
 call plug#end()
 
-function! NextCell(pattern) range
-    let rg = range(a:firstline, a:lastline)
-    let chunk = len(rg)
-    for var in range(1, chunk)
-        let i = search(a:pattern, "nW")
-        if i == 0
-            return
-        else
-            call cursor(i+1, 1)
-        endif
-    endfor
-    return
-endfunction
-
-function! PrevCell(pattern) range
-    let rg = range(a:firstline, a:lastline)
-    let chunk = len(rg)
-    for var in range(1, chunk)
-        let curline = line(".")
-        let i = search(a:pattern, "bnW")
-        if i != 0
-            call cursor(i-1, 1)
-        endif
-        let i = search(a:pattern, "bnW")
-        if i == 0
-            call cursor(curline, 1)
-            return
-        else
-            call cursor(i+1, 1)
-        endif
-    endfor
-    return
-endfunction
+let NextCell = luaeval('require("util").next_cell')
+let PrevCell = luaeval('require("util").prev_cell')

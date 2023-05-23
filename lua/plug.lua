@@ -1,3 +1,5 @@
+require("nvim-autopairs").setup({})
+
 local wiki_path = "~/Dropbox/wiki"
 
 vim.g["conjure#filetype#fennel"] = "conjure.client.fennel.stdio"
@@ -59,7 +61,7 @@ local m = require("maps")
 m.noremap("n", "<Leader>f", ":Files<CR>")
 m.noremap("n", "<Leader>a", ":Rg<CR>")
 m.noremap("n", "<Leader>t", ":Tags<CR>")
-m.noremap("n", "<Leader>wr", function()
+m.noremap("n", "<Leader>wf", function()
   vim.fn["fzf#vim#grep"](
     'rg --column --line-number --no-heading --color=always --smart-case -- "" ' .. wiki_path,
     1,

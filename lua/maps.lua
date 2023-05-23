@@ -1,6 +1,4 @@
-local M = {}
-
-function M.noremap(mode, key, command, options)
+function noremap(mode, key, command, options)
   local option = { remap = false }
 
   if options ~= nil then
@@ -21,20 +19,22 @@ local function toggle_quickfix()
   end
 end
 
-M.noremap("n", ";", ":")
+noremap("n", ";", ":")
 
-M.noremap("n", "<c-e>", toggle_quickfix)
-M.noremap({ "n", "v" }, "j", "gj")
-M.noremap({ "n", "v" }, "k", "gk")
-M.noremap("n", "<C-l>", ":bnext<CR>")
-M.noremap("n", "<C-h>", ":bprev<CR>")
-M.noremap("i", "<C-n>", "<C-x><C-o><C-p>")
+noremap("n", "<c-e>", toggle_quickfix)
+noremap({ "n", "v" }, "j", "gj")
+noremap({ "n", "v" }, "k", "gk")
+noremap("n", "<C-l>", ":bnext<CR>")
+noremap("n", "<C-h>", ":bprev<CR>")
+noremap("i", "<C-n>", "<C-x><C-o><C-p>")
 
-M.noremap("v", "<Leader>y", '"*y')
-M.noremap("n", "<Leader>p", '"*p')
-M.noremap("n", "<Leader>h", ":noh<CR>")
-M.noremap("n", "<Leader>r", ":lua dofile('" .. os.getenv("HOME") .. "/.config/nvim/init.lua')<CR>")
+noremap("v", "<Leader>y", '"*y')
+noremap("n", "<Leader>p", '"*p')
+noremap("n", "<Leader>h", ":noh<CR>")
+noremap("n", "<Leader>r", ":lua dofile('" .. os.getenv("HOME") .. "/.config/nvim/init.lua')<CR>")
 
 vim.api.nvim_create_user_command("Q", "bd", {})
 
-return M
+return {
+  noremap = noremap,
+}
