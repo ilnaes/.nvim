@@ -19,6 +19,7 @@ packer.init({
 })
 
 packer.startup(function(use)
+  use("wbthomason/packer.nvim")
   use("vim-airline/vim-airline")
 
   use({
@@ -52,7 +53,7 @@ packer.startup(function(use)
       },
     })
   else
-    use({ "neoclide/coc.nvim" })
+    use({ "neoclide/coc.nvim", branch = "release" })
   end
 
   use("jpalardy/vim-slime")
