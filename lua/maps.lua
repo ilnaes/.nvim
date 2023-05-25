@@ -1,4 +1,4 @@
-function noremap(mode, key, command, options)
+local function noremap(mode, key, command, options)
   local option = { remap = false }
 
   if options ~= nil then
@@ -26,7 +26,7 @@ noremap({ "n", "v" }, "j", "gj")
 noremap({ "n", "v" }, "k", "gk")
 noremap("n", "<C-l>", ":bnext<CR>")
 noremap("n", "<C-h>", ":bprev<CR>")
-noremap("i", "<C-n>", "<C-x><C-o><C-p>")
+-- noremap("i", "<C-n>", "<C-x><C-o><C-p>")
 
 noremap("v", "<Leader>y", '"*y')
 noremap("n", "<Leader>p", '"*p')

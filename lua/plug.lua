@@ -56,12 +56,12 @@ vim.g["ale_fixers"] = {
   lua = { "stylua" },
 }
 
-local m = require("maps")
+local noremap = require("maps").noremap
 
-m.noremap("n", "<Leader>f", ":Files<CR>")
-m.noremap("n", "<Leader>a", ":Rg<CR>")
-m.noremap("n", "<Leader>t", ":Tags<CR>")
-m.noremap("n", "<Leader>wf", function()
+noremap("n", "<Leader>f", ":Files<CR>")
+noremap("n", "<Leader>a", ":Rg<CR>")
+noremap("n", "<Leader>t", ":Tags<CR>")
+noremap("n", "<Leader>wf", function()
   vim.fn["fzf#vim#grep"](
     'rg --column --line-number --no-heading --color=always --smart-case -- "" ' .. wiki_path,
     1,
@@ -79,8 +79,8 @@ local function send_word()
   vim.fn.setreg('"', reg_save)
 end
 
-m.noremap("n", "\\ww", send_word)
-m.noremap("v", "\\vv", "<Plug>SlimeRegionSend")
-m.noremap("n", "\\ll", "<Plug>SlimeLineSend")
-m.noremap("n", "\\pp", "<Plug>SlimeParagraphSend")
-m.noremap("n", "\\cc", "<Plug>SlimeSendCell")
+noremap("n", "\\ww", send_word)
+noremap("v", "\\vv", "<Plug>SlimeRegionSend")
+noremap("n", "\\ll", "<Plug>SlimeLineSend")
+noremap("n", "\\pp", "<Plug>SlimeParagraphSend")
+noremap("n", "\\cc", "<Plug>SlimeSendCell")

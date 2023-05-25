@@ -8,6 +8,62 @@ vim.g["polyglot_disabled"] = { "markdown", "autoindent" }
 -- load some non-migrated code
 vim.cmd("source " .. dir .. ".vimrc")
 
+vim.cmd([[packadd packer.nvim]])
+
+local util = require("util")
+
+local packer = require("packer")
+local putil = require("packer.util")
+packer.init({
+  package_root = putil.join_paths(vim.fn.stdpath("data"), "site", "pack"),
+})
+
+packer.startup(function(use)
+  use("vim-airline/vim-airline")
+
+  use({
+    "junegunn/fzf",
+    run = function()
+      vim.fn["fzf#install"]()
+    end,
+  })
+  use("junegunn/fzf.vim")
+  use("tpope/vim-commentary")
+  use("sheerun/vim-polyglot")
+  -- use 'kkoomen/vim-doge', { 'do': { -> doge#install() } }
+
+  local i = string.find(util.get_hostname(), "MacBook")
+
+  if i ~= nil then
+    use({
+      "dense-analysis/ale",
+      ft = {
+        "go",
+        "python",
+        "c",
+        "javascript",
+        "typescript",
+        "typescriptreact",
+        "json",
+        "rmd",
+        "r",
+        "clojure",
+        "lua",
+      },
+    })
+  end
+
+  use("jpalardy/vim-slime")
+  -- use 'neoclide/coc.nvim', {'branch': 'release', 'for': ['python', 'typescript', 'javascript' ]}
+
+  use({ "Olical/conjure", ft = { "clojure", "fennel" } })
+  -- use 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+  use("guns/vim-sexp")
+
+  use("vimwiki/vimwiki")
+  use("windwp/nvim-autopairs")
+end)
+
 dofile(dir .. "lua/plug.lua")
 
 local function nvim_create_augroups(definitions)

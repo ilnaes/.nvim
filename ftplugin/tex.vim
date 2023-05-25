@@ -8,6 +8,8 @@ nnoremap <leader>f :w<CR>:silent !/Applications/Skim.app/Contents/SharedSupport/
 nnoremap <silent> <buffer> ]] :call NextCell("^\\\\\\(sub\\)*section")<CR>
 nnoremap <silent> <buffer> [[ :call PrevCell("^\\\\\\(sub\\)*section")<CR>
 
+" iunmap! <C-n>
+
 " latex macros
 iab ca<Bslash> \begin{cases}<NL>\end{cases}<ESC>O<BACKSPACE><SPACE>
 iab pf<Bslash> \begin{proof}<NL>\end{proof}<ESC>O<BACKSPACE><SPACE>
