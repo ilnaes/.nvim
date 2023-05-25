@@ -51,6 +51,8 @@ packer.startup(function(use)
         "lua",
       },
     })
+  else
+    use({ "neoclide/coc.nvim" })
   end
 
   use("jpalardy/vim-slime")
