@@ -1,4 +1,5 @@
 require("nvim-autopairs").setup({})
+local hostname = require("util").get_hostname()
 
 local wiki_path = "~/Dropbox/wiki"
 
@@ -84,3 +85,7 @@ noremap("v", "\\vv", "<Plug>SlimeRegionSend")
 noremap("n", "\\ll", "<Plug>SlimeLineSend")
 noremap("n", "\\pp", "<Plug>SlimeParagraphSend")
 noremap("n", "\\cc", "<Plug>SlimeSendCell")
+
+if not hostname:find("MacBook") then
+  noremap("i", "<cr>", [[coc#pum#visible() ? coc#pum#confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"]], {expr = true})
+end
