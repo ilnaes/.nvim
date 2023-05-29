@@ -24,13 +24,12 @@ packer.startup(function(use)
 
   use({
     "junegunn/fzf",
-    run = function()
-      vim.fn["fzf#install"]()
-    end,
+    run = vim.fn["fzf#install"],
   })
   use("junegunn/fzf.vim")
   use("tpope/vim-commentary")
   use("sheerun/vim-polyglot")
+  use("jpalardy/vim-slime")
   -- use 'kkoomen/vim-doge', { 'do': { -> doge#install() } }
 
   local i = string.find(util.get_hostname(), "MacBook")
@@ -56,11 +55,8 @@ packer.startup(function(use)
     use({ "neoclide/coc.nvim", branch = "release" })
   end
 
-  use("jpalardy/vim-slime")
-  -- use 'neoclide/coc.nvim', {'branch': 'release', 'for': ['python', 'typescript', 'javascript' ]}
-
   use({ "Olical/conjure", ft = { "clojure", "fennel" } })
-  -- use 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+  use({ "fatih/vim-go", run = ":GoUpdateBinaries" })
   use("guns/vim-sexp")
 
   use("vimwiki/vimwiki")
