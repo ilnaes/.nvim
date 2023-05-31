@@ -1,5 +1,4 @@
 require("nvim-autopairs").setup({})
-local hostname = require("util").get_hostname()
 local v = vim
 
 local wiki_path = "~/Dropbox/wiki"
@@ -87,7 +86,7 @@ noremap("n", "\\ll", "<Plug>SlimeLineSend")
 noremap("n", "\\pp", "<Plug>SlimeParagraphSend")
 noremap("n", "\\cc", "<Plug>SlimeSendCell")
 
-if not hostname:find("MacBook") then
+if not vim.fn.hostname():find("MacBook") then
   noremap(
     "i",
     "<cr>",

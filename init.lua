@@ -10,8 +10,6 @@ vim.cmd("source " .. dir .. ".vimrc")
 
 vim.cmd([[packadd packer.nvim]])
 
-local util = require("util")
-
 local packer = require("packer")
 local putil = require("packer.util")
 packer.init({
@@ -32,7 +30,7 @@ packer.startup(function(use)
   use("jpalardy/vim-slime")
   -- use 'kkoomen/vim-doge', { 'do': { -> doge#install() } }
 
-  local i = string.find(util.get_hostname(), "MacBook")
+  local i = string.find(vim.fn.hostname(), "MacBook")
 
   if i ~= nil then
     use({

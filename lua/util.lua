@@ -1,14 +1,6 @@
 local fn = vim.fn
 local v = vim
 
-local function get_hostname()
-  local f = io.popen("/bin/hostname")
-  local hostname = f:read("*a") or ""
-  f:close()
-  hostname = string.gsub(hostname, "\n$", "")
-  return hostname
-end
-
 local function next_cell(pattern)
   local i = fn.search(pattern, "nW")
   if i == 0 then
@@ -91,7 +83,6 @@ end
 return {
   next_cell = next_cell,
   prev_cell = prev_cell,
-  get_hostname = get_hostname,
   get_form = get_form,
   send_form = send_form,
 }
