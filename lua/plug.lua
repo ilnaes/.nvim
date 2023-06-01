@@ -1,5 +1,59 @@
-require("nvim-autopairs").setup({})
 local v = vim
+
+v.g["polyglot_disabled"] = { "markdown", "autoindent" }
+
+v.cmd([[packadd packer.nvim]])
+
+local packer = require("packer")
+local putil = require("packer.util")
+packer.init({
+  package_root = putil.join_paths(v.fn.stdpath("data"), "site", "pack"),
+})
+
+packer.startup(function(use)
+  use("wbthomason/packer.nvim")
+  use("vim-airline/vim-airline")
+
+  use({
+    "junegunn/fzf",
+    run = v.fn["fzf#install"],
+  })
+  use("junegunn/fzf.vim")
+  use("tpope/vim-commentary")
+  use("sheerun/vim-polyglot")
+  use("jpalardy/vim-slime")
+  -- use 'kkoomen/vim-doge', { 'do': { -> doge#install() } }
+
+  if string.find(v.fn.hostname(), "MacBook") ~= nil then
+    use({
+      "dense-analysis/ale",
+      ft = {
+        "go",
+        "python",
+        "c",
+        "javascript",
+        "typescript",
+        "typescriptreact",
+        "json",
+        "rmd",
+        "r",
+        "clojure",
+        "lua",
+      },
+    })
+  else
+    use({ "neoclide/coc.nvim", branch = "release" })
+  end
+
+  use({ "Olical/conjure", ft = { "clojure", "fennel" } })
+  use({ "fatih/vim-go", run = ":GoUpdateBinaries" })
+  use("guns/vim-sexp")
+
+  use("vimwiki/vimwiki")
+  use("windwp/nvim-autopairs")
+end)
+
+require("nvim-autopairs").setup({})
 
 local wiki_path = "~/Dropbox/wiki"
 
@@ -86,7 +140,7 @@ noremap("n", "\\ll", "<Plug>SlimeLineSend")
 noremap("n", "\\pp", "<Plug>SlimeParagraphSend")
 noremap("n", "\\cc", "<Plug>SlimeSendCell")
 
-if not vim.fn.hostname():find("MacBook") then
+if v.fn.hostname():find("MacBook") == nil then
   noremap(
     "i",
     "<cr>",

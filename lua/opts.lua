@@ -4,6 +4,7 @@ vim.cmd("colorscheme cobalt2")
 
 vim.g.mapleader = ","
 
+o.mouse = "a"
 o.vb = true
 o.expandtab = true
 o.autoread = true

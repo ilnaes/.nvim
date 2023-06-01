@@ -1,28 +1,50 @@
-local fn = vim.fn
 local v = vim
 
 local function next_cell(pattern)
-  local i = fn.search(pattern, "nW")
+  if pattern == nil then
+    pattern = v.b.cell_pattern
+  end
+
+  local i = v.fn.search(pattern, "nW")
   if i == 0 then
     return
   else
-    fn.cursor(i + 1, 1)
+    v.fn.cursor(i + 1, 1)
   end
 end
 
 local function prev_cell(pattern)
-  local curline = fn.line(".")
-  local i = fn.search(pattern, "bnW")
-  if i ~= 0 then
-    fn.cursor(i - 1, 1)
+  if pattern == nil then
+    pattern = v.b.cell_pattern
   end
 
-  i = fn.search(pattern, "bnW")
-  if i == 0 then
-    fn.cursor(curline, 1)
-  else
-    fn.cursor(i + 1, 1)
+  local curline = v.fn.line(".")
+  local i = v.fn.search(pattern, "bnW")
+  if i ~= 0 then
+    v.fn.cursor(i - 1, 1)
   end
+
+  i = v.fn.search(pattern, "bnW")
+  if i == 0 then
+    v.fn.cursor(curline, 1)
+  else
+    v.fn.cursor(i + 1, 1)
+  end
+end
+
+local function get_synstack(offset)
+  if offset == nil then
+    offset = 0
+  end
+
+  local stack = v.fn.synstack(v.fn.line("."), v.fn.col(".") + offset)
+  local ret = ""
+
+  for _, val in ipairs(stack) do
+    ret = v.fn.synIDattr(val, "name") .. ret
+  end
+
+  return ret
 end
 
 -- gets current form
@@ -37,18 +59,18 @@ local function get_form()
   local close = "[]})]"
 
   local pos1, pos2
-  local i = fn.col(".")
+  local i = v.fn.col(".")
 
-  if fn.getline("."):sub(i, i):find(close) then
-    pos1 = fn.searchpairpos(open, "", close, "bn", skip)
-    pos2 = { fn.line("."), fn.col(".") }
+  if v.fn.getline("."):sub(i, i):find(close) then
+    pos1 = v.fn.searchpairpos(open, "", close, "bn", skip)
+    pos2 = { v.fn.line("."), v.fn.col(".") }
   else
-    pos1 = fn.searchpairpos(open, "", close, "bcn", skip)
-    pos2 = fn.searchpairpos(open, "", close, "n", skip)
+    pos1 = v.fn.searchpairpos(open, "", close, "bcn", skip)
+    pos2 = v.fn.searchpairpos(open, "", close, "n", skip)
   end
 
-  fn.setpos("'[", { 0, pos1[1], pos1[2], 0 })
-  fn.setpos("']", { 0, pos2[1], pos2[2], 0 })
+  v.fn.setpos("'[", { 0, pos1[1], pos1[2], 0 })
+  v.fn.setpos("']", { 0, pos2[1], pos2[2], 0 })
 
   v.cmd([[silent exe "normal! `[v`]y"]])
 
@@ -60,12 +82,15 @@ local function get_form()
   return ret
 end
 
+-- uses send_form to slime send a sexp
+-- 0 for top level
+-- n for nth current form
 local function send_form(num)
-  local save_pos = fn.getpos(".")
+  local save_pos = v.fn.getpos(".")
   local code
   if num == 0 then
     local reg_save = v.fn.getreg('"')
-    fn["sexp#select_current_top_list"]("v", 0)
+    v.fn["sexp#select_current_top_list"]("v", 0)
     v.cmd([[silent exe "normal! y"]])
     code = v.fn.getreg('"')
     v.fn.setreg('"', reg_save)
@@ -76,13 +101,26 @@ local function send_form(num)
       code = get_form()
     end
   end
-  fn["slime#send"](code .. "\r")
-  fn.setpos(".", save_pos)
+  v.fn["slime#send"](code .. "\r")
+  v.fn.setpos(".", save_pos)
+end
+
+local function str_split(s, sep)
+  if sep == nil then
+    sep = "%s"
+  end
+  local t = {}
+  for str in string.gmatch(s, "([^" .. sep .. "]+)") do
+    table.insert(t, str)
+  end
+  return t
 end
 
 return {
+  str_split = str_split,
   next_cell = next_cell,
   prev_cell = prev_cell,
   get_form = get_form,
   send_form = send_form,
+  get_synstack = get_synstack,
 }
