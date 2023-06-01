@@ -7,13 +7,23 @@ v.b.cell_pattern = "^\\\\\\(sub\\)*section"
 noremap("n", "]]", util.next_cell, options)
 noremap("n", "[[", util.prev_cell, options)
 
-noremap("n", "<leader>gv", [[:execute '!open ' . substitute(expand("%:r"), " ", "\\\\ ", "") . '.pdf']])
-noremap("n", "<leader>lp", [[:w<CR>:execute '!latexmk -pdf -g -halt-on-error "' . expand("%") . '"']])
 noremap(
-  "n",
-  "<leader>f",
-  [[:w<CR>:silent !/Applications/Skim.app/Contents/SharedSupport/displayline <C-r>=line('.')<CR> %<.pdf<CR> <C-L><CR>]],
-  options
+	"n",
+	"<leader>gv",
+	[[:execute '!open ' . substitute(expand("%:r"), " ", "\\\\ ", "") . '.pdf']],
+	{ buffer = true }
+)
+noremap(
+	"n",
+	"<leader>lp",
+	[[:w<CR>:execute '!latexmk -pdf -g -halt-on-error "' . expand("%") . '"']],
+	{ buffer = true }
+)
+noremap(
+	"n",
+	"<leader>v",
+	[[:w<CR>:silent !/Applications/Skim.app/Contents/SharedSupport/displayline <C-r>=line('.')<CR> %<.pdf<CR> <C-L><CR>]],
+	options
 )
 
 noremap("n", "J", "j", options)
@@ -40,9 +50,9 @@ v.opt_local.commentstring = "% %s"
 -- setlocal commentstring=%\ %s | :NoMatchParen
 
 local function set_servername()
-  local nvim_server_file = "/tmp/curnvimserver.txt"
-  local cmd = "echo " .. v.v.servername .. " > " .. nvim_server_file
-  io.popen(cmd)
+	local nvim_server_file = "/tmp/curnvimserver.txt"
+	local cmd = "echo " .. v.v.servername .. " > " .. nvim_server_file
+	io.popen(cmd)
 end
 
 set_servername()
@@ -52,80 +62,80 @@ local npairs = require("nvim-autopairs")
 local cond = require("nvim-autopairs.conds")
 
 npairs.add_rules({
-  Rule("$", "$", { "tex", "latex" }):with_pair(cond.not_before_regex("\\", 1)),
+	Rule("$", "$", { "tex", "latex" }):with_pair(cond.not_before_regex("\\", 1)):with_move(cond.done()),
 })
 
 -- returns nil if not in math mode
 -- 0 if in math mode and -1 if previous
 -- character is in math mode (so ending $)
 local function in_mathmode(mode)
-  if mode == nil then
-    mode = "texMathZone"
-  else
-    mode = "texMathZone" .. mode
-  end
+	if mode == nil then
+		mode = "texMathZone"
+	else
+		mode = "texMathZone" .. mode
+	end
 
-  if util.get_synstack():find(mode) then
-    return 0
-  elseif util.get_synstack(-1):find(mode) then
-    return -1
-  end
+	if util.get_synstack():find(mode) then
+		return 0
+	elseif util.get_synstack(-1):find(mode) then
+		return -1
+	end
 end
 
 local function go_mathmode()
-  local mode = in_mathmode("X")
+	local mode = in_mathmode("X")
 
-  if mode == nil then
-    print("Not in math mode!")
-    return
-  end
+	if mode == nil then
+		print("Not in math mode!")
+		return
+	end
 
-  local sel_save = v.o.selection
-  local reg_save = v.fn.getreg('"')
-  v.o.selection = "inclusive"
+	local sel_save = v.o.selection
+	local reg_save = v.fn.getreg('"')
+	v.o.selection = "inclusive"
 
-  local line = v.fn.line(".")
-  local indent = string.rep(" ", v.fn.indent(line))
-  local pos2
-  local pos1
-  local found = false
+	local indent = string.rep(" ", v.fn.indent(v.fn.line(".")))
+	local pos2, pos1
+	local found = false
 
-  if mode ~= -1 then
-    repeat
-      pos2 = v.fn.searchpos("\\$")
+	if mode ~= -1 then
+		repeat
+			pos2 = v.fn.searchpos("\\$")
 
-      if util.get_synstack(0):find("texSpecialChar") then
-        v.cmd([[silent exe "normal! l"]])
-      else
-        found = true
-      end
-    until found
-  else
-    pos2 = { v.fn.line("."), v.fn.col(".") }
-  end
+			if util.get_synstack(0):find("texSpecialChar") then
+				v.cmd([[silent exe "normal! l"]])
+			else
+				found = true
+			end
+		until found
+	else
+		pos2 = { v.fn.line("."), v.fn.col(".") }
+	end
 
-  repeat
-    pos1 = v.fn.searchpos("\\$", "b")
-  until not util.get_synstack(0):find("texSpecialChar")
+	repeat
+		pos1 = v.fn.searchpos("\\$", "b")
+	until not util.get_synstack(0):find("texSpecialChar")
 
-  v.fn.setpos("'[", { 0, pos1[1], pos1[2], 0 })
-  v.fn.setpos("']", { 0, pos2[1], pos2[2], 0 })
-  v.cmd([[silent exe "normal! `[v`]c\n"]])
+	local line = v.fn.line(".")
 
-  local ret = indent .. v.fn.getreg('"')
-  ret = util.str_split(ret:sub(2, #ret - 1), "\n")
+	v.fn.setpos("'[", { 0, pos1[1], pos1[2], 0 })
+	v.fn.setpos("']", { 0, pos2[1], pos2[2], 0 })
+	v.cmd([[silent exe "normal! `[v`]c\n"]])
 
-  for i, val in ipairs(ret) do
-    ret[i] = string.rep(" ", v.o.tabstop) .. val
-  end
+	local ret = indent .. v.fn.getreg('"')
+	ret = util.str_split(ret:sub(2, #ret - 1), "\n")
 
-  table.insert(ret, 1, indent .. "\\begin{align*}")
-  table.insert(ret, indent .. "\\end{align*}")
+	for i, val in ipairs(ret) do
+		ret[i] = string.rep(" ", v.o.tabstop) .. val
+	end
 
-  v.api.nvim_buf_set_lines(0, line, line, false, ret)
+	table.insert(ret, 1, indent .. "\\begin{align*}")
+	table.insert(ret, indent .. "\\end{align*}")
 
-  v.fn.setreg('"', reg_save)
-  v.o.selection = sel_save
+	v.api.nvim_buf_set_lines(0, line, line, false, ret)
+
+	v.fn.setreg('"', reg_save)
+	v.o.selection = sel_save
 end
 
-noremap("n", "gmm", go_mathmode)
+noremap("n", "gmm", go_mathmode, options)

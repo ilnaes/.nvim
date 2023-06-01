@@ -116,11 +116,34 @@ local function str_split(s, sep)
   return t
 end
 
+local function format()
+  local save_pos = v.fn.getpos(".")
+  v.cmd.mkview()
+  v.cmd([[silent exe "normal! gg=G"]])
+  v.fn.setpos(".", save_pos)
+  v.cmd.loadview()
+end
+
+local function create_augroups(definitions)
+  for group_name, definition in pairs(definitions) do
+    local group = v.api.nvim_create_augroup(group_name, { clear = true })
+    for _, def in ipairs(definition) do
+      v.api.nvim_create_autocmd(def[1], {
+        pattern = def[2],
+        group = group,
+        command = def[3],
+      })
+    end
+  end
+end
+
 return {
+  format = format,
   str_split = str_split,
   next_cell = next_cell,
   prev_cell = prev_cell,
   get_form = get_form,
   send_form = send_form,
   get_synstack = get_synstack,
+  create_augroups = create_augroups,
 }
