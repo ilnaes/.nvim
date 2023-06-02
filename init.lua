@@ -11,6 +11,10 @@ require("opts")
 require("maps")
 require("plug")
 
+if require("util").macbook then
+  require("macbook")
+end
+
 local augroups = {
   initial = {
     { "BufReadPost", "*", [[call setpos(".", getpos("'\""))]] },
