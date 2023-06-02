@@ -137,6 +137,8 @@ local function create_augroups(definitions)
   end
 end
 
+local macbook = v.fn.hostname():find("MacBook") ~= nil
+
 return {
   format = format,
   str_split = str_split,
@@ -146,4 +148,5 @@ return {
   send_form = send_form,
   get_synstack = get_synstack,
   create_augroups = create_augroups,
+  macbook = macbook,
 }

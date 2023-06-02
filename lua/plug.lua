@@ -2,58 +2,22 @@ local v = vim
 
 v.g["polyglot_disabled"] = { "markdown", "autoindent" }
 
-v.cmd([[packadd packer.nvim]])
-
-local packer = require("packer")
-local putil = require("packer.util")
-packer.init({
-  package_root = putil.join_paths(v.fn.stdpath("data"), "site", "pack"),
-})
-
-packer.startup(function(use)
-  use("wbthomason/packer.nvim")
-  use("vim-airline/vim-airline")
-
-  use({
-    "junegunn/fzf",
-    run = v.fn["fzf#install"],
+local lazypath = v.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not v.loop.fs_stat(lazypath) then
+  v.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
   })
-  use("junegunn/fzf.vim")
-  use("tpope/vim-commentary")
-  use("sheerun/vim-polyglot")
-  use("jpalardy/vim-slime")
-  -- use 'kkoomen/vim-doge', { 'do': { -> doge#install() } }
+end
+v.opt.rtp:prepend(lazypath)
 
-  if string.find(v.fn.hostname(), "MacBook") ~= nil then
-    use({
-      "dense-analysis/ale",
-      ft = {
-        "go",
-        "python",
-        "c",
-        "javascript",
-        "typescript",
-        "typescriptreact",
-        "json",
-        "rmd",
-        "r",
-        "clojure",
-        "lua",
-      },
-    })
-  else
-    use({ "neoclide/coc.nvim", branch = "release" })
-  end
+require("lazy").setup("plugins")
 
-  use({ "Olical/conjure", ft = { "clojure", "fennel" } })
-  use({ "fatih/vim-go", run = ":GoUpdateBinaries" })
-  use("guns/vim-sexp")
-
-  use("vimwiki/vimwiki")
-  use("windwp/nvim-autopairs")
-end)
-
-require("nvim-autopairs").setup({})
+require("luasnip/loaders/from_vscode").load({ paths = { "~/.local/share/nvim/lazy/friendly-snippets" } })
 
 local wiki_path = "~/Dropbox/wiki"
 
