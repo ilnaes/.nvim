@@ -3,17 +3,9 @@ local v = vim
 local dir = os.getenv("HOME") .. "/.config/nvim/"
 v.cmd("source " .. dir .. ".vimrc")
 
--- dofile(dir .. "lua/opts.lua")
--- dofile(dir .. "lua/maps.lua")
--- dofile(dir .. "lua/plug.lua")
-
 require("opts")
 require("maps")
 require("plug")
-
-if require("util").macbook then
-  require("macbook")
-end
 
 local augroups = {
   initial = {

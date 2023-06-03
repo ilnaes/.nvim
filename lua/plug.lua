@@ -15,7 +15,7 @@ if not v.loop.fs_stat(lazypath) then
 end
 v.opt.rtp:prepend(lazypath)
 
-require("lazy").setup("plugins")
+require("lazy").setup("plugins", { defaults = { lazy = true } })
 
 local wiki_path = "~/Dropbox/wiki"
 
@@ -102,7 +102,9 @@ noremap("n", "\\ll", "<Plug>SlimeLineSend")
 noremap("n", "\\pp", "<Plug>SlimeParagraphSend")
 noremap("n", "\\cc", "<Plug>SlimeSendCell")
 
-if v.fn.hostname():find("MacBook") == nil then
+if require("util").macbook then
+  require("macbook")
+else
   noremap(
     "i",
     "<cr>",
