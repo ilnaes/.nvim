@@ -17,6 +17,11 @@ v.opt.rtp:prepend(lazypath)
 
 require("lazy").setup("plugins", { defaults = { lazy = true } })
 
+vim.keymap.set("n", "f", function ()
+  local current_window = vim.fn.win_getid()
+  require('leap').leap { target_windows = { current_window } }
+end)
+
 local wiki_path = "~/Dropbox/wiki"
 
 v.g["conjure#filetype#fennel"] = "conjure.client.fennel.stdio"

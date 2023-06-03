@@ -32,7 +32,6 @@ if require("util").macbook then
     {
       "hrsh7th/nvim-cmp",
       keys = {
-        "<C-n>",
         {
           "<C-n>",
           function()

@@ -3,7 +3,6 @@ local macbook = require("util").macbook
 
 return {
   { "vim-airline/vim-airline", lazy = false },
-
   {
     "junegunn/fzf",
     build = function()
@@ -15,6 +14,13 @@ return {
   { "tpope/vim-commentary", lazy = false },
   { "sheerun/vim-polyglot", lazy = false },
   { "jpalardy/vim-slime", lazy = false },
+  {
+    "ggandor/leap.nvim",
+    lazy = false,
+    config = function()
+      require("leap").set_default_keymaps()
+    end,
+  },
   -- use 'kkoomen/vim-doge', { 'do': { -> doge#install() } }
 
   { "Olical/conjure", ft = { "clojure", "fennel" } },
