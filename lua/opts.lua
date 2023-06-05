@@ -4,6 +4,8 @@ vim.cmd("colorscheme cobalt2")
 
 vim.g.mapleader = ","
 
+vim.g.python3_host_prog = vim.fn.expand("~/.pyenv/shims/python")
+
 o.mouse = "a"
 o.vb = true
 o.expandtab = true

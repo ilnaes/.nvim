@@ -1,5 +1,16 @@
 local v = vim
 
+local function noremap(mode, key, command, options)
+  local option = { remap = false }
+
+  if options ~= nil then
+    for k, v in pairs(options) do
+      option[k] = v
+    end
+  end
+  vim.keymap.set(mode, key, command, option)
+end
+
 local function next_cell(pattern)
   if pattern == nil then
     pattern = v.b.cell_pattern
@@ -127,12 +138,10 @@ end
 local function create_augroups(definitions)
   for group_name, definition in pairs(definitions) do
     local group = v.api.nvim_create_augroup(group_name, { clear = true })
+
     for _, def in ipairs(definition) do
-      v.api.nvim_create_autocmd(def[1], {
-        pattern = def[2],
-        group = group,
-        command = def[3],
-      })
+      def[2].group = group
+      v.api.nvim_create_autocmd(def[1], def[2])
     end
   end
 end
@@ -149,4 +158,5 @@ return {
   get_synstack = get_synstack,
   create_augroups = create_augroups,
   macbook = macbook,
+  noremap = noremap,
 }

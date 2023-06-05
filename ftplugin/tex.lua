@@ -1,6 +1,6 @@
 local v = vim
 local util = require("util")
-local noremap = require("maps").noremap
+local noremap = util.noremap
 local options = { silent = true, buffer = true }
 
 v.b.cell_pattern = "^\\\\\\(sub\\)*section"
@@ -109,7 +109,7 @@ local function go_mathmode()
       end
     until found
   else
-    pos2 = { v.fn.line("."), v.fn.col(".") }
+    pos2 = v.api.nvim_win_get_cursor(0)
   end
 
   repeat

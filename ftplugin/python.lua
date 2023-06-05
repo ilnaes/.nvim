@@ -1,5 +1,5 @@
-local noremap = require("maps").noremap
 local util = require("util")
+local noremap = util.noremap
 local v = vim
 
 v.g.slime_cell_delimiter = "#%%"

@@ -1,13 +1,4 @@
-local function noremap(mode, key, command, options)
-  local option = { remap = false }
-
-  if options ~= nil then
-    for k, v in pairs(options) do
-      option[k] = v
-    end
-  end
-  vim.keymap.set(mode, key, command, option)
-end
+local noremap = require("util").noremap
 
 local function toggle_quickfix()
   local winid = vim.fn.getloclist(0, { winid = 0 }).winid
