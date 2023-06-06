@@ -3,7 +3,7 @@ local v = vim
 return {
   {
     "L3MON4D3/LuaSnip",
-    version = "1.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
+    version = "1.*",
     -- install jsregexp (optional!).
     build = "make install_jsregexp",
     init = function()
@@ -26,6 +26,25 @@ return {
           return "<Tab>"
         end
       end, { expr = true, remap = false })
+    end,
+    config = function()
+      -- require("luasnip").config.set_config({ update_events = "TextChanged,TextChangedI" })
+      v.keymap.set("i", "jk", function()
+        if require("luasnip").jumpable(1) then
+          return "<Plug>luasnip-jump-next"
+        else
+          return "jk"
+        end
+      end, { expr = true, silent = true })
+      v.keymap.set("i", "kj", function()
+        if require("luasnip").jumpable(-1) then
+          return "<Plug>luasnip-jump-prev"
+        else
+          return "kj"
+        end
+      end, { expr = true, silent = true })
+
+      require("luasnip.loaders.from_lua").lazy_load({ paths = "~/.config/nvim/lua/snip/" })
     end,
     dependencies = { "rafamadriz/friendly-snippets" },
   },
