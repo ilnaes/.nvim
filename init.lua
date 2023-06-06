@@ -1,8 +1,5 @@
 local v = vim
 
-local dir = os.getenv("HOME") .. "/.config/nvim/"
-v.cmd("source " .. dir .. ".vimrc")
-
 require("opts")
 require("maps")
 

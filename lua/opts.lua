@@ -6,6 +6,7 @@ vim.g.mapleader = ","
 
 vim.g.python3_host_prog = vim.fn.expand("~/.pyenv/shims/python")
 
+o.completeopt = { "menu", "menuone", "noselect" }
 o.mouse = "a"
 o.vb = true
 o.expandtab = true

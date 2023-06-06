@@ -14,8 +14,12 @@ return {
       mode = "i",
     },
   },
-  dependencies = { "L3MON4D3/LuaSnip", "saadparwaiz1/cmp_luasnip", "hrsh7th/cmp-buffer" },
-  enabled = require("util").macbook,
+  dependencies = {
+    "L3MON4D3/LuaSnip",
+    "saadparwaiz1/cmp_luasnip",
+    "hrsh7th/cmp-buffer",
+    "hrsh7th/cmp-nvim-lsp",
+  },
   config = function()
     local cmp = require("cmp")
     cmp.setup({
@@ -47,6 +51,7 @@ return {
       sources = {
         { name = "luasnip" },
         { name = "buffer" },
+        { name = "nvim_lsp" },
       },
     })
   end,
