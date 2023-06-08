@@ -1,11 +1,10 @@
-local v = vim
 local noremap = require("util").noremap
 
 return {
   {
     "junegunn/fzf",
     build = function()
-      v.cmd("call fzf#install()")
+      vim.cmd("call fzf#install()")
     end,
     lazy = false,
   },
@@ -26,8 +25,8 @@ return {
     config = function()
       require("leap").set_default_keymaps()
 
-      v.keymap.set("n", "f", function()
-        local current_window = v.fn.win_getid()
+      vim.keymap.set("n", "f", function()
+        local current_window = vim.fn.win_getid()
         require("leap").leap({ target_windows = { current_window } })
       end)
     end,
@@ -38,15 +37,15 @@ return {
     "Olical/conjure",
     ft = { "clojure", "fennel" },
     config = function()
-      v.g["conjure#filetype#fennel"] = "conjure.client.fennel.stdio"
-      v.g["conjure#client#fennel#stdio#command"] = "fnl"
+      vim.g["conjure#filetype#fennel"] = "conjure.client.fennel.stdio"
+      vim.g["conjure#client#fennel#stdio#command"] = "fnl"
     end,
   },
   {
     "guns/vim-sexp",
     ft = { "clojure", "fennel" },
     config = function()
-      v.g["sexp_enable_insert_mode_mappings"] = 0
+      vim.g["sexp_enable_insert_mode_mappings"] = 0
     end,
   },
   { "fatih/vim-go", ft = { "go" }, build = ":GoUpdateBinaries" },

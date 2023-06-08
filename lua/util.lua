@@ -1,5 +1,3 @@
-local v = vim
-
 local function noremap(mode, key, command, options)
   local option = { remap = false }
 
@@ -13,33 +11,33 @@ end
 
 local function next_cell(pattern)
   if pattern == nil then
-    pattern = v.b.cell_pattern
+    pattern = vim.b.cell_pattern
   end
 
-  local i = v.fn.search(pattern, "nW")
+  local i = vim.fn.search(pattern, "nW")
   if i == 0 then
     return
   else
-    v.fn.cursor(i + 1, 1)
+    vim.fn.cursor(i + 1, 1)
   end
 end
 
 local function prev_cell(pattern)
   if pattern == nil then
-    pattern = v.b.cell_pattern
+    pattern = vim.b.cell_pattern
   end
 
-  local curline = v.fn.line(".")
-  local i = v.fn.search(pattern, "bnW")
+  local curline = vim.fn.line(".")
+  local i = vim.fn.search(pattern, "bnW")
   if i ~= 0 then
-    v.fn.cursor(i - 1, 1)
+    vim.fn.cursor(i - 1, 1)
   end
 
-  i = v.fn.search(pattern, "bnW")
+  i = vim.fn.search(pattern, "bnW")
   if i == 0 then
-    v.fn.cursor(curline, 1)
+    vim.fn.cursor(curline, 1)
   else
-    v.fn.cursor(i + 1, 1)
+    vim.fn.cursor(i + 1, 1)
   end
 end
 
@@ -48,11 +46,11 @@ local function get_synstack(offset)
     offset = 0
   end
 
-  local stack = v.fn.synstack(v.fn.line("."), v.fn.col(".") + offset)
+  local stack = vim.fn.synstack(vim.fn.line("."), vim.fn.col(".") + offset)
   local ret = ""
 
   for _, val in ipairs(stack) do
-    ret = v.fn.synIDattr(val, "name") .. ret
+    ret = vim.fn.synIDattr(val, "name") .. ret
   end
 
   return ret
@@ -61,34 +59,34 @@ end
 -- gets current form
 -- WILL MUTATE CURSOR so should use internally
 local function get_form()
-  local sel_save = v.o.selection
-  local reg_save = v.fn.getreg('"')
-  v.o.selection = "inclusive"
+  local sel_save = vim.o.selection
+  local reg_save = vim.fn.getreg('"')
+  vim.o.selection = "inclusive"
 
   local skip = 'synIDattr(synID(line("."),col("."),1),"name") =~? "comment\\|string\\|char\\|regexp"'
   local open = "[[{(]"
   local close = "[]})]"
 
   local pos1, pos2
-  local i = v.fn.col(".")
+  local i = vim.fn.col(".")
 
-  if v.fn.getline("."):sub(i, i):find(close) then
-    pos1 = v.fn.searchpairpos(open, "", close, "bn", skip)
-    pos2 = { v.fn.line("."), v.fn.col(".") }
+  if vim.fn.getline("."):sub(i, i):find(close) then
+    pos1 = vim.fn.searchpairpos(open, "", close, "bn", skip)
+    pos2 = { vim.fn.line("."), vim.fn.col(".") }
   else
-    pos1 = v.fn.searchpairpos(open, "", close, "bcn", skip)
-    pos2 = v.fn.searchpairpos(open, "", close, "n", skip)
+    pos1 = vim.fn.searchpairpos(open, "", close, "bcn", skip)
+    pos2 = vim.fn.searchpairpos(open, "", close, "n", skip)
   end
 
-  v.fn.setpos("'[", { 0, pos1[1], pos1[2], 0 })
-  v.fn.setpos("']", { 0, pos2[1], pos2[2], 0 })
+  vim.fn.setpos("'[", { 0, pos1[1], pos1[2], 0 })
+  vim.fn.setpos("']", { 0, pos2[1], pos2[2], 0 })
 
-  v.cmd([[silent exe "normal! `[v`]y"]])
+  vim.cmd([[silent exe "normal! `[v`]y"]])
 
-  local ret = v.fn.getreg('"')
+  local ret = vim.fn.getreg('"')
 
-  v.fn.setreg('"', reg_save)
-  v.o.selection = sel_save
+  vim.fn.setreg('"', reg_save)
+  vim.o.selection = sel_save
 
   return ret
 end
@@ -97,23 +95,23 @@ end
 -- 0 for top level
 -- n for nth current form
 local function send_form(num)
-  local save_pos = v.fn.getpos(".")
+  local save_pos = vim.fn.getpos(".")
   local code
   if num == 0 then
-    local reg_save = v.fn.getreg('"')
-    v.fn["sexp#select_current_top_list"]("v", 0)
-    v.cmd([[silent exe "normal! y"]])
-    code = v.fn.getreg('"')
-    v.fn.setreg('"', reg_save)
+    local reg_save = vim.fn.getreg('"')
+    vim.fn["sexp#select_current_top_list"]("v", 0)
+    vim.cmd([[silent exe "normal! y"]])
+    code = vim.fn.getreg('"')
+    vim.fn.setreg('"', reg_save)
   else
     code = get_form()
     for _ = 1, num - 1 do
-      v.cmd([[silent exe "normal! h"]])
+      vim.cmd([[silent exe "normal! h"]])
       code = get_form()
     end
   end
-  v.fn["slime#send"](code .. "\r")
-  v.fn.setpos(".", save_pos)
+  vim.fn["slime#send"](code .. "\r")
+  vim.fn.setpos(".", save_pos)
 end
 
 local function str_split(s, sep)
@@ -128,25 +126,25 @@ local function str_split(s, sep)
 end
 
 local function format()
-  local save_pos = v.fn.getpos(".")
-  v.cmd.mkview()
-  v.cmd([[silent exe "normal! gg=G"]])
-  v.fn.setpos(".", save_pos)
-  v.cmd.loadview()
+  local save_pos = vim.fn.getpos(".")
+  vim.cmd.mkview()
+  vim.cmd([[silent exe "normal! gg=G"]])
+  vim.fn.setpos(".", save_pos)
+  vim.cmd.loadview()
 end
 
 local function create_augroups(definitions)
   for group_name, definition in pairs(definitions) do
-    local group = v.api.nvim_create_augroup(group_name, { clear = true })
+    local group = vim.api.nvim_create_augroup(group_name, { clear = true })
 
     for _, def in ipairs(definition) do
       def[2].group = group
-      v.api.nvim_create_autocmd(def[1], def[2])
+      vim.api.nvim_create_autocmd(def[1], def[2])
     end
   end
 end
 
-local macbook = v.fn.hostname():find("MacBook") ~= nil
+local macbook = vim.fn.hostname():find("MacBook") ~= nil
 
 return {
   format = format,

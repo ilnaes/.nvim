@@ -1,11 +1,9 @@
-local v = vim
-
 require("opts")
 require("maps")
 
-local lazypath = v.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not v.loop.fs_stat(lazypath) then
-  v.fn.system({
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
     "git",
     "clone",
     "--filter=blob:none",
@@ -14,7 +12,7 @@ if not v.loop.fs_stat(lazypath) then
     lazypath,
   })
 end
-v.opt.rtp:prepend(lazypath)
+vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup("plugins", { defaults = { lazy = true } })
 
@@ -27,11 +25,11 @@ local augroups = {
       { "BufReadPost", "BufDelete" },
       {
         callback = function(event)
-          local num_bufs = #v.fn.getbufinfo({ buflisted = 1 })
+          local num_bufs = #vim.fn.getbufinfo({ buflisted = 1 })
           if event.event == "BufDelete" and num_bufs <= 2 then
-            v.o.showtabline = 1
+            vim.o.showtabline = 1
           elseif event.event == "BufReadPost" and num_bufs >= 2 then
-            v.o.showtabline = 2
+            vim.o.showtabline = 2
           end
         end,
       },

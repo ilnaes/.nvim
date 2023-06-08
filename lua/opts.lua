@@ -6,7 +6,6 @@ vim.g.mapleader = ","
 
 vim.g.python3_host_prog = vim.fn.expand("~/.pyenv/shims/python")
 
-o.completeopt = { "menu", "menuone", "noselect" }
 o.mouse = "a"
 o.vb = true
 o.expandtab = true
@@ -23,11 +22,11 @@ o.number = true
 o.hidden = true
 o.splitbelow = true
 o.splitright = true
-o.omnifunc = "syntaxcomplete#Complete"
 o.wildmenu = true
 o.shiftwidth = 2
 o.tabstop = 2
 o.concealcursor = "nc"
+o.completeopt = "menu,menuone,preview,noselect,noinsert"
 
 vim.o.shortmess = vim.o.shortmess .. "c"
 vim.o.whichwrap = vim.o.whichwrap .. "<,>,h,l,[,]"

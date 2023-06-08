@@ -1,9 +1,8 @@
-local v = vim
 local util = require("util")
 local noremap = util.noremap
 local options = { silent = true, buffer = true }
 
-v.b.cell_pattern = "^\\\\\\(sub\\)*section"
+vim.b.cell_pattern = "^\\\\\\(sub\\)*section"
 noremap("n", "]]", util.next_cell, options)
 noremap("n", "[[", util.prev_cell, options)
 
@@ -30,28 +29,28 @@ noremap("n", "J", "j", options)
 noremap("n", "K", "k", options)
 
 -- latex macros
-v.cmd("iab <buffer> ca<Bslash> \\begin{cases}<NL>\\end{cases}<ESC>O<BACKSPACE><SPACE>")
-v.cmd("iab <buffer> pf<Bslash> \\begin{proof}<NL>\\end{proof}<ESC>O<BACKSPACE><SPACE>")
-v.cmd("iab <buffer> mm<Bslash> \\begin{align*}<NL>\\end{align*}<ESC>O<BACKSPACE><SPACE>")
-v.cmd("iab <buffer> ml<Bslash> \\begin{multline*}<NL>\\end{multline*}<ESC>O<BACKSPACE><SPACE>")
-v.cmd("iab <buffer> ma<Bslash> \\left(\\begin{array}<NL>\\end{array}\\right)<ESC>kA")
-v.cmd("iab <buffer> enn<Bslash> \\begin{enumerate}[label=(\\arabic*)]<NL>\\end{enumerate}<ESC>O\\item")
-v.cmd("iab <buffer> ena<Bslash> \\begin{enumerate}[label=(\\alph*)]<NL>\\end{enumerate}<ESC>O\\item")
-v.cmd("iab <buffer> it<Bslash> \\begin{itemize}<NL>\\end{itemize}<ESC>O\\item")
-v.cmd("iab <buffer> th<Bslash> \\begin{theorem}<NL>\\end{theorem}<ESC>O<BACKSPACE><SPACE>")
-v.cmd("iab <buffer> pr<Bslash> \\begin{proposition}<NL>\\end{proposition}<ESC>O<BACKSPACE><SPACE>")
-v.cmd("iab <buffer> co<Bslash> \\begin{corollary}<NL>\\end{corollary}<ESC>O<BACKSPACE><SPACE>")
-v.cmd("iab <buffer> lm<Bslash> \\begin{lemma}<NL>\\end{lemma}<ESC>O<BACKSPACE><SPACE>")
-v.cmd("iab <buffer> rm<Bslash> \\begin{remark}<NL>\\end{remark}<ESC>O<BACKSPACE><SPACE>")
+-- vim.cmd("iab <buffer> ca<Bslash> \\begin{cases}<NL>\\end{cases}<ESC>O<BACKSPACE><SPACE>")
+-- vim.cmd("iab <buffer> pf<Bslash> \\begin{proof}<NL>\\end{proof}<ESC>O<BACKSPACE><SPACE>")
+-- vim.cmd("iab <buffer> mm<Bslash> \\begin{align*}<NL>\\end{align*}<ESC>O<BACKSPACE><SPACE>")
+-- vim.cmd("iab <buffer> ml<Bslash> \\begin{multline*}<NL>\\end{multline*}<ESC>O<BACKSPACE><SPACE>")
+-- vim.cmd("iab <buffer> ma<Bslash> \\left(\\begin{array}<NL>\\end{array}\\right)<ESC>kA")
+-- vim.cmd("iab <buffer> enn<Bslash> \\begin{enumerate}[label=(\\arabic*)]<NL>\\end{enumerate}<ESC>O\\item")
+-- vim.cmd("iab <buffer> ena<Bslash> \\begin{enumerate}[label=(\\alph*)]<NL>\\end{enumerate}<ESC>O\\item")
+-- vim.cmd("iab <buffer> it<Bslash> \\begin{itemize}<NL>\\end{itemize}<ESC>O\\item")
+-- vim.cmd("iab <buffer> th<Bslash> \\begin{theorem}<NL>\\end{theorem}<ESC>O<BACKSPACE><SPACE>")
+-- vim.cmd("iab <buffer> pr<Bslash> \\begin{proposition}<NL>\\end{proposition}<ESC>O<BACKSPACE><SPACE>")
+-- vim.cmd("iab <buffer> co<Bslash> \\begin{corollary}<NL>\\end{corollary}<ESC>O<BACKSPACE><SPACE>")
+-- vim.cmd("iab <buffer> lm<Bslash> \\begin{lemma}<NL>\\end{lemma}<ESC>O<BACKSPACE><SPACE>")
+-- vim.cmd("iab <buffer> rm<Bslash> \\begin{remark}<NL>\\end{remark}<ESC>O<BACKSPACE><SPACE>")
 
-v.opt.signcolumn = "no"
-v.opt.number = false
-v.opt_local.commentstring = "% %s"
+vim.opt.signcolumn = "no"
+vim.opt.number = false
+vim.opt_local.commentstring = "% %s"
 -- setlocal commentstring=%\ %s | :NoMatchParen
 
 local function set_servername()
   local nvim_server_file = "/tmp/curnvimserver.txt"
-  local cmd = "echo " .. v.v.servername .. " > " .. nvim_server_file
+  local cmd = "echo " .. vim.vim.servername .. " > " .. nvim_server_file
   io.popen(cmd)
 end
 
@@ -90,52 +89,52 @@ local function go_mathmode()
     return
   end
 
-  local sel_save = v.o.selection
-  local reg_save = v.fn.getreg('"')
-  v.o.selection = "inclusive"
+  local sel_save = vim.o.selection
+  local reg_save = vim.fn.getreg('"')
+  vim.o.selection = "inclusive"
 
-  local indent = string.rep(" ", v.fn.indent(v.fn.line(".")))
+  local indent = string.rep(" ", vim.fn.indent(vim.fn.line(".")))
   local pos2, pos1
   local found = false
 
   if mode ~= -1 then
     repeat
-      pos2 = v.fn.searchpos("\\$")
+      pos2 = vim.fn.searchpos("\\$")
 
       if util.get_synstack(0):find("texSpecialChar") then
-        v.cmd([[silent exe "normal! l"]])
+        vim.cmd([[silent exe "normal! l"]])
       else
         found = true
       end
     until found
   else
-    pos2 = v.api.nvim_win_get_cursor(0)
+    pos2 = vim.api.nvim_win_get_cursor(0)
   end
 
   repeat
-    pos1 = v.fn.searchpos("\\$", "b")
+    pos1 = vim.fn.searchpos("\\$", "b")
   until not util.get_synstack(0):find("texSpecialChar")
 
-  local line = v.fn.line(".")
+  local line = vim.fn.line(".")
 
-  v.fn.setpos("'[", { 0, pos1[1], pos1[2], 0 })
-  v.fn.setpos("']", { 0, pos2[1], pos2[2], 0 })
-  v.cmd([[silent exe "normal! `[v`]c\n"]])
+  vim.fn.setpos("'[", { 0, pos1[1], pos1[2], 0 })
+  vim.fn.setpos("']", { 0, pos2[1], pos2[2], 0 })
+  vim.cmd([[silent exe "normal! `[v`]c\n"]])
 
-  local ret = indent .. v.fn.getreg('"')
+  local ret = indent .. vim.fn.getreg('"')
   ret = util.str_split(ret:sub(2, #ret - 1), "\n")
 
   for i, val in ipairs(ret) do
-    ret[i] = string.rep(" ", v.o.tabstop) .. val
+    ret[i] = string.rep(" ", vim.o.tabstop) .. val
   end
 
   table.insert(ret, 1, indent .. "\\begin{align*}")
   table.insert(ret, indent .. "\\end{align*}")
 
-  v.api.nvim_buf_set_lines(0, line, line, false, ret)
+  vim.api.nvim_buf_set_lines(0, line, line, false, ret)
 
-  v.fn.setreg('"', reg_save)
-  v.o.selection = sel_save
+  vim.fn.setreg('"', reg_save)
+  vim.o.selection = sel_save
 end
 
 noremap("n", "gmm", go_mathmode, options)
