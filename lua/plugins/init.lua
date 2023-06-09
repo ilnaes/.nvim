@@ -48,7 +48,6 @@ return {
       vim.g["sexp_enable_insert_mode_mappings"] = 0
     end,
   },
-  { "fatih/vim-go", ft = { "go" }, build = ":GoUpdateBinaries" },
   {
     "windwp/nvim-autopairs",
     config = function()

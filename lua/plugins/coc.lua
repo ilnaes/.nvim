@@ -11,7 +11,7 @@ return {
       { expr = true }
     )
 
-    if vim.fn.exists(":ALEDisable") then
+    if vim.fn.exists(":ALEDisable") ~= 0 then
       vim.cmd(":ALEDisable")
     end
   end,
