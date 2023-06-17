@@ -1,4 +1,6 @@
-local function noremap(mode, key, command, options)
+local util = {}
+
+function util.noremap(mode, key, command, options)
   local option = { remap = false }
 
   if options ~= nil then
@@ -9,7 +11,7 @@ local function noremap(mode, key, command, options)
   vim.keymap.set(mode, key, command, option)
 end
 
-local function next_cell(pattern)
+function util.next_cell(pattern)
   if pattern == nil then
     pattern = vim.b.cell_pattern
   end
@@ -22,7 +24,7 @@ local function next_cell(pattern)
   end
 end
 
-local function prev_cell(pattern)
+function util.prev_cell(pattern)
   if pattern == nil then
     pattern = vim.b.cell_pattern
   end
@@ -41,7 +43,7 @@ local function prev_cell(pattern)
   end
 end
 
-local function get_synstack(offset)
+function util.get_synstack(offset)
   if offset == nil then
     offset = 0
   end
@@ -58,7 +60,7 @@ end
 
 -- gets current form
 -- WILL MUTATE CURSOR so should use internally
-local function get_form()
+function util.get_form()
   local sel_save = vim.o.selection
   local reg_save = vim.fn.getreg('"')
   vim.o.selection = "inclusive"
@@ -94,7 +96,7 @@ end
 -- uses send_form to slime send a sexp
 -- 0 for top level
 -- n for nth current form
-local function send_form(num)
+function util.send_form(num)
   local save_pos = vim.fn.getpos(".")
   local code
   if num == 0 then
@@ -104,17 +106,17 @@ local function send_form(num)
     code = vim.fn.getreg('"')
     vim.fn.setreg('"', reg_save)
   else
-    code = get_form()
+    code = util.get_form()
     for _ = 1, num - 1 do
       vim.cmd([[silent exe "normal! h"]])
-      code = get_form()
+      code = util.get_form()
     end
   end
   vim.fn["slime#send"](code .. "\r")
   vim.fn.setpos(".", save_pos)
 end
 
-local function str_split(s, sep)
+function util.str_split(s, sep)
   if sep == nil then
     sep = "%s"
   end
@@ -125,7 +127,7 @@ local function str_split(s, sep)
   return t
 end
 
-local function format()
+function util.format()
   local save_pos = vim.fn.getpos(".")
   vim.cmd.mkview()
   vim.cmd([[silent exe "normal! gg=G"]])
@@ -133,7 +135,7 @@ local function format()
   vim.cmd.loadview()
 end
 
-local function create_augroups(definitions)
+function util.create_augroups(definitions)
   for group_name, definition in pairs(definitions) do
     local group = vim.api.nvim_create_augroup(group_name, { clear = true })
 
@@ -144,17 +146,6 @@ local function create_augroups(definitions)
   end
 end
 
-local macbook = vim.fn.hostname():find("MacBook") ~= nil
+util.macbook = vim.fn.hostname():find("MacBook") ~= nil
 
-return {
-  format = format,
-  str_split = str_split,
-  next_cell = next_cell,
-  prev_cell = prev_cell,
-  get_form = get_form,
-  send_form = send_form,
-  get_synstack = get_synstack,
-  create_augroups = create_augroups,
-  macbook = macbook,
-  noremap = noremap,
-}
+return util

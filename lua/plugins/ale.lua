@@ -3,7 +3,6 @@ return {
   "dense-analysis/ale",
   enabled = require("util").macbook,
   ft = {
-    "go",
     "python",
     "c",
     "html",
@@ -21,7 +20,6 @@ return {
     vim.g["ale_lint_on_save"] = 1
     vim.g["ale_linters_explicit"] = 1
 
-    vim.o.omnifunc = "ale#completion#OmniFunc"
     vim.g["ale_hover_cursor"] = 0
 
     vim.g["ale_linters"] = {
@@ -52,7 +50,12 @@ return {
   end,
 
   config = function()
-    vim.keymap.set("n", "<C-]>", ":ALEGoToDefinition<CR>", { buffer = true })
-    vim.keymap.set("n", "<Leader>rn", ":ALERename<CR>", { buffer = true })
+    vim.o.omnifunc = "ale#completion#OmniFunc"
+    vim.keymap.set("i", "<C-n>", [[pumvisible()? "\<C-n>" : "\<C-x>\<C-o>"]], { expr = true })
+
+    vim.keymap.set("n", "<C-]>", ":ALEGoToDefinition<CR>")
+    vim.keymap.set("n", "<Leader>rn", ":ALERename<CR>")
+    vim.keymap.set("n", "K", ":ALEHover<CR>")
+    vim.keymap.set("n", "<C-r>", ":ALEFindReferences<CR>")
   end,
 }

@@ -21,11 +21,7 @@ noremap("n", "<C-h>", ":bprev<CR>")
 
 noremap("v", "<Leader>y", '"*y')
 noremap("n", "<Leader>p", '"*p')
-noremap("n", "<Leader>h", ":noh<CR>")
+noremap("n", "<Leader>z", ":noh<CR>")
 noremap("n", "<Leader>r", ":lua dofile('" .. os.getenv("HOME") .. "/.config/nvim/init.lua')<CR>")
 
 vim.api.nvim_create_user_command("Q", "bd", {})
-
-return {
-  noremap = noremap,
-}

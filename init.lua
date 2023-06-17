@@ -21,6 +21,7 @@ local augroups = {
     { "BufReadPost", { pattern = "*", command = [[call setpos(".", getpos("'\""))]] } },
     { "CompleteDone", { pattern = "*", command = "pclose" } },
     { "FileType", { pattern = "c,cpp,go", command = [[setlocal commentstring=//\ %s]] } },
+    { "FileType", { pattern = "help", command = "noremap <buffer> <C-]> <C-]>" } },
     {
       { "BufReadPost", "BufDelete" },
       {
