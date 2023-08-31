@@ -57,7 +57,7 @@ local ret = {
     )
   ),
   s(
-    { trig = "ena" },
+    { trig = "enn" },
     fmta(
       [[
     \begin{enumerate}[label=(\arabic*)]
@@ -67,7 +67,7 @@ local ret = {
     )
   ),
   s(
-    { trig = "enn" },
+    { trig = "ena" },
     fmta(
       [[
     \begin{enumerate}[label=(\alph*)]

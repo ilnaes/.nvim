@@ -50,19 +50,21 @@ vim.opt_local.commentstring = "% %s"
 
 local function set_servername()
   local nvim_server_file = "/tmp/curnvimserver.txt"
-  local cmd = "echo " .. vim.vim.servername .. " > " .. nvim_server_file
+  local cmd = "echo " .. vim.v.servername .. " > " .. nvim_server_file
   io.popen(cmd)
 end
 
 set_servername()
 
-local Rule = require("nvim-autopairs.rule")
-local npairs = require("nvim-autopairs")
-local cond = require("nvim-autopairs.conds")
+-- local Rule = require("nvim-autopairs.rule")
+-- local npairs = require("nvim-autopairs")
+-- local cond = require("nvim-autopairs.conds")
 
-npairs.add_rules({
-  Rule("$", "$", { "tex", "latex" }):with_pair(cond.not_before_regex("\\", 1)):with_move(cond.done()),
-})
+-- npairs.add_rules({
+--   Rule("$", "$", { "tex", "latex" }):with_pair(cond.not_before_regex("\\", 1)):with_move(cond.done()),
+--   Rule("'", "'", { "tex", "latex" }):with_pair(cond.not_before_regex("\\", 1)):with_move(cond.done()),
+--   Rule('"', '"', { "tex", "latex" }):with_pair(cond.not_before_regex("\\", 1)):with_move(cond.done()),
+-- })
 
 -- returns nil if not in math mode
 -- 0 if in math mode and -1 if previous

@@ -55,4 +55,11 @@ return {
     end,
     lazy = false,
   },
+  {
+    "chentoast/marks.nvim",
+    config = function()
+      require("marks").setup({})
+    end,
+    lazy = false,
+  },
 }
