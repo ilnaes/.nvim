@@ -19,6 +19,15 @@ return {
     )
   ),
   s(
+    { trig = "lo", dscr = "Local" },
+    fmta(
+      [[local <>]],
+      {
+        i(1),
+      }
+    )
+  ),
+  s(
     { trig = "ff", dscr = "Generic for loop" },
     fmta(
       [[
