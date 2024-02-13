@@ -8,7 +8,8 @@ return {
 	},
 	{
 		dir = "~/code/lua_lsp",
-		lazy = false,
+		cond = os.getenv("LSP") == "TEST",
+		ft = { "lua" },
 	},
 	{
 		"junegunn/fzf",
@@ -69,7 +70,7 @@ return {
 		config = function()
 			require("nvim-autopairs").setup({})
 		end,
-		ft = { "lua", "typescript" },
+		ft = { "lua", "typescript", "javascript" },
 	},
 	{
 		"chentoast/marks.nvim",

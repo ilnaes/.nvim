@@ -1,7 +1,7 @@
 -- return {}
 return {
 	"dense-analysis/ale",
-	enabled = require("util").macbook,
+	cond = require("util").macbook and os.getenv("LSP") ~= "TEST",
 	ft = {
 		"python",
 		"c",
@@ -13,6 +13,7 @@ return {
 		"json",
 		"lua",
 		"haskell",
+		"vim",
 	},
 
 	init = function()
@@ -34,6 +35,7 @@ return {
 			typescriptreact = { "tsserver" },
 			lua = { "lua-language-server" },
 			haskell = { "hls" },
+			vim = { "vimls" },
 		}
 
 		vim.g["ale_fixers"] = {
@@ -59,6 +61,6 @@ return {
 		vim.keymap.set("n", "<C-]>", ":ALEGoToDefinition<CR>")
 		vim.keymap.set("n", "<Leader>rn", ":ALERename<CR>")
 		vim.keymap.set("n", "K", ":ALEHover<CR>")
-		vim.keymap.set("n", "<C-r>", ":ALEFindReferences<CR>")
+		vim.keymap.set("n", "R", ":ALEFindReferences<CR>")
 	end,
 }
