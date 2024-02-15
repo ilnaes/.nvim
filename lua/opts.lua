@@ -2,7 +2,11 @@ local o = vim.opt
 
 vim.g.mapleader = ","
 
-vim.g.python3_host_prog = "/usr/bin/python3"
+if require("util").macbook then
+  vim.g.python3_host_prog = "/usr/bin/python3"
+else
+  vim.g.python3_host_prog = "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3"
+end
 
 o.mouse = "a"
 o.vb = true

@@ -146,6 +146,6 @@ function util.create_augroups(definitions)
   end
 end
 
-util.macbook = vim.fn.hostname():find("Sean") ~= nil
+util.macbook = vim.fn.hostname():find("violet") == nil
 
 return util
