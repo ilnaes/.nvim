@@ -18,7 +18,8 @@ end
 return {
   "neoclide/coc.nvim",
   branch = "release",
-  lazy = require("util").macbook,
+  cond = not require("util").macbook,
+  ft = { "lua", "javascript", "typescript", "python", "vim" },
   keys = { "<Leader>ls" },
   config = function()
     vim.keymap.set(

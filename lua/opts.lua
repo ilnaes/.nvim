@@ -29,6 +29,7 @@ o.shiftwidth = 2
 o.tabstop = 2
 o.concealcursor = "nc"
 o.completeopt = "menu,menuone,preview,noselect,noinsert"
+o.conceallevel = 1
 
 vim.o.shortmess = vim.o.shortmess .. "c"
 vim.o.whichwrap = vim.o.whichwrap .. "<,>,h,l,[,]"
