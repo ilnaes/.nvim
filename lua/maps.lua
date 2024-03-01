@@ -54,4 +54,10 @@ noremap("n", "<Leader>mp", function()
   })
 end)
 
-vim.api.nvim_create_user_command("Q", "bd", {})
+vim.api.nvim_create_user_command("Q", function(args)
+  if args.bang then
+    vim.cmd("bd!")
+  else
+    vim.cmd("bd")
+  end
+end, { bang = true })

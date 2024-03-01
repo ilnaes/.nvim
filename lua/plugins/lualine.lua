@@ -35,6 +35,5 @@ return {
         lualine_z = { "tabs" },
       },
     })
-    vim.cmd("set showtabline=1")
   end,
 }

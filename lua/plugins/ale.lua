@@ -14,6 +14,7 @@ return {
 		"lua",
 		"haskell",
 		"vim",
+		"markdown",
 	},
 
 	init = function()
@@ -51,12 +52,14 @@ return {
 			rmd = { "styler" },
 			r = { "styler" },
 			lua = { "stylua" },
+			markdown = { "prettier" },
 		}
 	end,
 
 	config = function()
 		vim.o.omnifunc = "ale#completion#OmniFunc"
 		vim.keymap.set("i", "<C-n>", [[pumvisible()? "\<C-n>" : "\<C-x>\<C-o>"]], { expr = true })
+		vim.keymap.set("i", "<CR>", [[(pumvisible()?("\<C-y>"):("\<cr>"))]], { expr = true })
 
 		vim.keymap.set("n", "<C-]>", ":ALEGoToDefinition<CR>")
 		vim.keymap.set("n", "<Leader>rn", ":ALERename<CR>")
