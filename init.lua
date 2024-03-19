@@ -23,13 +23,22 @@ local augroups = {
     { "FileType", { pattern = "c,cpp,go", command = [[setlocal commentstring=//\ %s]] } },
     { "FileType", { pattern = "help", command = "noremap <buffer> <C-]> <C-]>" } },
     {
-      "BufEnter",
+      "FileType",
       {
-        pattern = "*",
+        pattern = "lua,javascript,typescipt,markdown,tex",
         callback = function()
-          vim.opt.tabstop = 2
-          vim.opt.shiftwidth = 2
-          vim.opt.expandtab = true
+          vim.bo.tabstop = 2
+          vim.bo.shiftwidth = 2
+        end,
+      },
+    },
+    {
+      "FileType",
+      {
+        pattern = "python",
+        callback = function()
+          vim.bo.tabstop = 4
+          vim.bo.shiftwidth = 4
         end,
       },
     },
