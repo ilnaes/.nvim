@@ -17,6 +17,25 @@ return {
       vim.fn.setreg('"', reg_save)
     end
 
+    local function exec_buffer()
+      local cmd = {
+        lua = "lua",
+        python = "python",
+        typescript = "ts-node",
+        javascript = "node",
+      }
+      local filepath = vim.fn.expand("%:p")
+      if filepath then
+        local ft = vim.bo.filetype
+
+        if cmd[ft] ~= nil then
+          vim.cmd("w")
+          vim.fn["slime#send"](cmd[ft] .. " " .. filepath .. "\r")
+        end
+      end
+    end
+
+    noremap("n", "\\ff", exec_buffer)
     noremap("n", "\\ww", send_word)
     noremap("v", "\\vv", "<Plug>SlimeRegionSend")
     noremap("n", "\\ll", "<Plug>SlimeLineSend")

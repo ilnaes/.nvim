@@ -21,13 +21,16 @@ return {
   },
   {
     "ibhagwan/fzf-lua",
-    -- optional for icon support
-    -- dependencies = { "nvim-tree/nvim-web-devicons" },
     config = function()
       local fzf = require("fzf-lua")
       noremap("n", "<Leader>ff", fzf.files)
       noremap("n", "<Leader>fa", fzf.live_grep)
       noremap("n", "<Leader>ft", fzf.help_tags)
+      fzf.setup({
+        files = {
+          fd_opts = [[--exclude '*.pdf']],
+        },
+      })
     end,
     lazy = false,
   },
@@ -38,14 +41,7 @@ return {
     end,
     lazy = false,
   },
-  -- {
-  --   "junegunn/fzf.vim",
-  --   lazy = false,
-  --   config = function()
-  --   end,
-  -- },
   { "tpope/vim-commentary", lazy = false },
-  -- { "sheerun/vim-polyglot", lazy = false },
   {
     "ggandor/leap.nvim",
     lazy = false,
@@ -56,6 +52,10 @@ return {
       vim.keymap.set("n", "f", function()
         local current_window = vim.fn.win_getid()
         require("leap").leap({ target_windows = { current_window } })
+      end)
+      vim.keymap.set("n", "e", function()
+        local current_window = vim.fn.win_getid()
+        require("leap").leap({ offset = 2, target_windows = { current_window } })
       end)
     end,
   },
@@ -79,7 +79,7 @@ return {
     config = function()
       require("nvim-autopairs").setup({})
     end,
-    ft = { "lua", "typescript", "javascript" },
+    ft = { "lua", "typescript", "javascript", "python" },
   },
   {
     "chentoast/marks.nvim",
