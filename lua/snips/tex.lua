@@ -16,6 +16,13 @@ local ret = {
 		})
 	),
 	s(
+		{ trig = "tf", dscr = "Fraction" },
+		fmta("\\tfrac{<>}{<>}", {
+			i(1),
+			i(2),
+		})
+	),
+	s(
 		{ trig = "ov", dscr = "Overset" },
 		fmta("\\overset{<>}{<>}", {
 			i(1),
@@ -105,8 +112,8 @@ local ret = {
 }
 
 local big = {
-	cu = "bigcup",
-	ca = "bigcap",
+	cup = "bigcup",
+	cap = "bigcap",
 	su = "sum",
 	li = "lim",
 	["in"] = "int",
@@ -127,6 +134,7 @@ local envs = {
 	pr = "proposition",
 	co = "corollary",
 	de = "definition",
+	ex = "example",
 }
 
 for k, v in pairs(envs) do
